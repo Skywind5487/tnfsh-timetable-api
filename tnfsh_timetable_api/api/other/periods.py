@@ -1,30 +1,20 @@
-tnfsh-timetable-api
-├── src
-│   ├── api
-│   │   ├── __init__.py
-│   │   ├── index
-│   │   │   ├── __init__.py
-│   │   │   ├── category.py
-│   │   │   ├── grade.py
-│   │   │   ├── teacher.py
-│   │   │   └── class_.py
-│   │   ├── scheduling
-│   │   │   ├── __init__.py
-│   │   │   ├── swap.py
-│   │   │   └── rotation.py
-│   │   ├── timetable
-│   │   │   ├── __init__.py
-│   │   │   └── query.py
-│   │   └── other
-│   │       ├── __init__.py
-│   │       ├── periods.py
-│   │       └── last_update.py
-│   ├── core
-│   │   └── __init__.py
-│   └── main.py
-├── pyproject.toml
-├── .gitignore
-├── .gitattributes
-├── .python-version
-├── LICENSE
-└── README.md
+from fastapi import APIRouter
+from tnfsh_timetable_core.timetable.crawler import fetch_raw_html, parse_html
+from pydantic import BaseModel
+from typing import Dict, List, Tuple
+
+class PeriodInfo(BaseModel):
+    periods: Dict[str, Tuple[str, str]]
+
+router = APIRouter()
+
+@router.get("/periods/{target}", response_model=PeriodInfo)
+async def get_periods(target: str = "顏永進"):
+    '''獲取課程節次資訊
+    
+    Args:
+        target: 目標名稱（教師姓名或班級代碼），預設為"顏永進"
+    '''
+    html = await fetch_raw_html(target)
+    periods = parse_html(html)["periods"]
+    return PeriodInfo(periods=periods)
