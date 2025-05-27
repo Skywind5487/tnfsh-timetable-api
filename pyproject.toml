@@ -1,0 +1,19 @@
+[project]
+name = "tnfsh-timetable-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "asyncio>=3.4.3",
+    "fastapi>=0.115.12",
+    "httpx>=0.28.1",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=1.0.0",
+    "tnfsh-timetable-core>=0.0.3",
+    "trio>=0.30.0",
+    "uvicorn>=0.34.2",
+]
+
+[tool.setuptools]
+packages = ["tnfsh_timetable_api"]
