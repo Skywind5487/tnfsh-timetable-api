@@ -30,6 +30,7 @@ async def get_streak_start_node(
     try:
         core = TNFSHTimetableCore()
         scheduling = await core.fetch_scheduling()
+        print(target)
         course_node: CourseNode = await scheduling.fetch_course_node(target, weekday=weekday, period=period)
         
         return CourseNodeInfo(
@@ -39,7 +40,7 @@ async def get_streak_start_node(
                 class_=[c.class_code for c in course_node.classes.values()],
                 weekday=course_node.time.weekday,
                 period=course_node.time.period,
-                streak=course_node.time.streak if course_node.time.streak and course_node.time.streak != 1 else None
+                streak=course_node.time.streak if course_node.time.streak else None
             )
         )
 
